@@ -7,14 +7,12 @@ on:
     branches:
     - main
 
-defaults:
-  run:
-    working-directory: WebApp
-
 jobs:
  pr-check:
    runs-on: macos-latest
-
+   defaults:
+     run:
+       working-directory: WebApp
    steps:
     - name: checkout repository
       uses: actions/checkout@v1
