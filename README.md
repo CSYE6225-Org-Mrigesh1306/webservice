@@ -1,15 +1,30 @@
-Assignment #01 
---I have done some changes
+##Assignment #01 
 
-Web Application Development
-Create a web application using a technology stack that meets Cloud-Native Web Application Requirements. Start implementing APIs for the web application. Features of the web application will be split among various applications. For this assignment, we will focus on the backend API (no UI) service. Additional features of the web application will be implemented in future assignments. We will also build the infrastructure on the cloud to host the application. This assignment will focus on the user management aspect of the application. You will implement RESTful APIs based on user stories you will find below.
+###Tech stack :
+**Programming language :** Java
+**Framework :** Springboot
 
-Tech stack :
-Programming language : Java
-Framework : Springboot
+**API :** 
+**GET -** http://localhost:8080/spring2022-csye6225/app/1.0.0/healthz
 
-API : 
-GET - http://localhost:8080/spring2022-csye6225/app/1.0.0/healthz
+###Steps to Run Project : 
+
+**Step 1 :** Clone the project
+
+git clone git@github.com:CSYE6225-Org-Mrigesh1306/webservice.git
+
+**Step 2 :** Go to Directory
+
+cd ./webservice/WebApp
+
+**Step 3 :** Run the Application
+
+./mvnw spring-boot:run
+
+
+**Step 4 :** Test the API
+
+curl http://localhost:8080/spring2022-csye6225/app/1.0.0/healthz
 
 
 
