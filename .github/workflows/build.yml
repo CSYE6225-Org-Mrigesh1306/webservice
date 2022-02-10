@@ -1,0 +1,30 @@
+#Assignment-1 Workflow
+
+name: pull request check workflow
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+ pr-check:
+   runs-on: macos-latest
+   defaults:
+     run:
+       working-directory: WebApp
+   steps:
+    - name: checkout repository
+      uses: actions/checkout@v1
+    #Set up JDK 11
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+          java-version: '11'
+          cache: maven
+    #Set up Maven cache
+    - name: Build with Maven
+      run: mvn --batch-mode --update-snapshots verify
+    #Run Tests
+    - name: Run Tests
+      run: mvn -B test
