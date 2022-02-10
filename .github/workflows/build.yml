@@ -1,4 +1,4 @@
-#Assgnment-1 Workflow
+#Assignment-1 Workflow
 
 name: pull request check workflow
 
@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working_directory:./WebApp
+    working_directory: ./WebApp
 
 jobs:
  pr-check:
