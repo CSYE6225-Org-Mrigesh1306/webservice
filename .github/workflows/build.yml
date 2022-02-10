@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working_directory: ./WebApp
+    working-directory: WebApp
 
 jobs:
  pr-check:
