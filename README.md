@@ -1,6 +1,6 @@
-#Assignment #02 Changes 
+# Assignment #02 Changes 
 
-###Tech stack :
+### Tech stack :
 **Programming language :** Java
 **Framework :** Springboot
 
