@@ -1,4 +1,4 @@
-package com.example.webapp.ControllerTest;
+package com.example.webapp.test.Controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.when;

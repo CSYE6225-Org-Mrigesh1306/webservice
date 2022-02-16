@@ -1,6 +1,10 @@
+<<<<<<< HEAD
+# Assignment #02 Changes 
+=======
 ##Assignment #0 DEMO CHAnge 
+>>>>>>> 41383ef04e5161dde695b2b1e8a46ba3debe3883
 
-###Tech stack :
+### Tech stack :
 **Programming language :** Java
 **Framework :** Springboot
 
@@ -23,7 +27,12 @@ cd ./webservice/WebApp
 ./mvnw spring-boot:run
 
 
-**Step 4 :** Test the API
+**Step 4 :** Run the Test Cases
+
+./mvnw test
+
+
+**Step 5 :** Test the API
 
 curl http://localhost:8080/spring2022-csye6225/app/1.0.0/healthz
 
