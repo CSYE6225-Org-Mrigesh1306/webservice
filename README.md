@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Assignment #02 Changes 
+=======
+##Assignment #0 DEMO CHAnge 
+>>>>>>> 41383ef04e5161dde695b2b1e8a46ba3debe3883
 
 ### Tech stack :
 **Programming language :** Java
@@ -9,6 +13,7 @@
 
 ###Steps to Run Project : 
 
+ 
 **Step 1 :** Clone the project
 
 git clone git@github.com:CSYE6225-Org-Mrigesh1306/webservice.git
