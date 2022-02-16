@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-# Assignment #02 Changes 
-=======
-##Assignment #0 DEMO CHAnge 
->>>>>>> 41383ef04e5161dde695b2b1e8a46ba3debe3883
+
+# Assignment #02 
 
 ### Tech stack :
 **Programming language :** Java

@@ -42,11 +42,22 @@ public class UserService {
 
 			if (customValidator.isUserExists(creds, u)) {
 
-				userdetails.add(u);
+				boolean isPassMatch = passwordEncoder.matches(creds[1], u.getPassword());
+				
+				if (isPassMatch) {
+					
+					userdetails.add(u);
+
+				} else {
+
+					throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Username/password");
+
+				}
 
 			}
 
 		}
+
 		return userdetails;
 
 	}
@@ -109,15 +120,24 @@ public class UserService {
 
 				if (customValidator.isUserExists(creds, u)) {
 
-					u.setPassword(passwordEncoder.encode(user.getPassword()));
-					u.setFirst_name(user.getFirst_name());
-					u.setLast_name(user.getLast_name());
-					u.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+					boolean isPassMatch = passwordEncoder.matches(creds[1], u.getPassword());
 
-					userrepo.save(u);
-					isUpdated = true;
-					isPresent = true;
-					break;
+					if (isPassMatch) {
+						u.setPassword(passwordEncoder.encode(user.getPassword()));
+						u.setFirst_name(user.getFirst_name());
+						u.setLast_name(user.getLast_name());
+						u.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+
+						userrepo.save(u);
+						isUpdated = true;
+						isPresent = true;
+						break;
+					} else {
+
+						throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Username/password");
+
+					}
+
 				}
 			}
 			if (!isPresent) {
