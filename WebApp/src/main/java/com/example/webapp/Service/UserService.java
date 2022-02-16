@@ -27,11 +27,11 @@ public class UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	public List<User> retrieveUser(String[] creds) {
-		
+
 		logger.info("**Retrieve User Information**");
 
 		List<User> userdetails = new ArrayList<>();
@@ -52,61 +52,84 @@ public class UserService {
 	}
 
 	public User createUser(User user) {
-		
-		logger.info("**Create New User**");
 
-		List<User> existingUsers = userrepo.findAll();
-		
-		for (User u : existingUsers) {
-			
-			if (u.getUsername().equalsIgnoreCase(user.getUsername())) {
-				
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-						"User Already exists. Try New username or password");
-				
+		logger.info("## Create New User ##");
+
+		boolean isValid = customValidator.fieldValidations(user);
+
+		if (isValid) {
+
+			List<User> existingUsers = userrepo.findAll();
+
+			for (User u : existingUsers) {
+
+				if (u.getUsername().equalsIgnoreCase(user.getUsername())) {
+
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							"User Already exists. Try New username or password");
+
+				}
 			}
+
+			if (!customValidator.isEmailValid(user.getUsername())) {
+
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Email Id Format");
+
+			}
+
+			String bcryptpass = passwordEncoder.encode(user.getPassword());
+			user.setPassword(bcryptpass);
+			user.setAccount_created(java.time.Clock.systemUTC().instant().toString());
+			user.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+
+		} else {
+
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All fields are mandatory");
+
 		}
-		
-		String bcryptpass = passwordEncoder.encode(user.getPassword());
-		user.setPassword(bcryptpass);
-		user.setAccount_created(java.time.Clock.systemUTC().instant().toString());
-		user.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
 
 		return userrepo.save(user);
 
 	}
 
 	public boolean updateUser(User user, String[] creds) {
-		
+
 		logger.info("**Update User Information**");
+
+		boolean isValid = customValidator.fieldValidations(user);
 
 		boolean isUpdated = false;
 		boolean isPresent = false;
-		
-		List<User> allusers = userrepo.findAll();
-		
-		for (User u : allusers) {
 
-			if (customValidator.isUserExists(creds, u)) {
+		if (isValid) {
 
-				u.setPassword(passwordEncoder.encode(user.getPassword()));
-				u.setFirst_name(user.getFirst_name());
-				u.setLast_name(user.getLast_name());
-				u.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+			List<User> allusers = userrepo.findAll();
 
-				userrepo.save(u);
-				isUpdated = true;
-				isPresent = true;
-				break;
+			for (User u : allusers) {
+
+				if (customValidator.isUserExists(creds, u)) {
+
+					u.setPassword(passwordEncoder.encode(user.getPassword()));
+					u.setFirst_name(user.getFirst_name());
+					u.setLast_name(user.getLast_name());
+					u.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+
+					userrepo.save(u);
+					isUpdated = true;
+					isPresent = true;
+					break;
+				}
 			}
+			if (!isPresent) {
+
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+						"User Does Not Exist. Please Check username or password");
+			}
+
+		} else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All fields are mandatory");
 		}
-		if (!isPresent) {
-			
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-					"User Does Not Exist. Please Check username or password");
-			
-		}
-		
+
 		return isUpdated;
 
 	}

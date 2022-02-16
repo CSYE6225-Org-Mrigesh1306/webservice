@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.sun.istack.NotNull;
 
 
 @Entity
@@ -20,23 +21,31 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@NotNull
+	@JsonProperty(required = true)
 	@Column(name = "first_name")
 	private String first_name;
 	
+	@NotNull
+	@JsonProperty(required = true)
 	@Column(name = "last_name")
 	private String last_name;
 	
+	@NotNull
 	@Column(name = "username")
 	private String username;
 	
+	@NotNull
 	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "password")
 	private String password;
 	
+	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
 	@Column(name = "account_created")
 	private String account_created;
 	
+	@NotNull
 	@JsonProperty(access = Access.READ_ONLY)
 	@Column(name = "account_updated")
 	private String account_updated;
@@ -97,6 +106,7 @@ public class User {
 		this.account_updated = account_updated;
 	}
 
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", first_name=" + first_name + ", last_name=" + last_name + ", username=" + username
@@ -104,7 +114,7 @@ public class User {
 				+ account_updated + "]";
 	}
 	
-	protected User() {
+	public User() {
 		
 	}
 
