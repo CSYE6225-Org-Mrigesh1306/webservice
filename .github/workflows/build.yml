@@ -3,9 +3,12 @@
 name: pull request check workflow
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
-    - main
+      - main
 
 jobs:
  pr-check:
@@ -25,7 +28,32 @@ jobs:
           cache: maven
     #Set up Maven cache
     - name: Build with Maven
-      run: mvn --batch-mode --update-snapshots verify
+      run: |
+        mvn -B package --file myapp/pom.xml
+        mkdir target && cp myapp/target/*.jar target
     #Run Tests
     - name: Run Tests
       run: mvn -B test
+    # Validate Packer
+    - name: Validate AMI Packer Template
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: validate
+        arguments: -syntax-only
+        target: ./packer/ami.json
+    # Init Packer
+    - name: Initialize AMI Packer Template
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: init
+        target: ./packer/ami.json
+    # Build Packer
+    - name: Build Packer Template
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: build
+        arguments: "-color=false -on-error=abort"
+        target: ./packer/ami.json
+      env:
+        PACKER_LOG: 1
+        GITHUB_REPO_PATH: ${{ github.workspace }}
