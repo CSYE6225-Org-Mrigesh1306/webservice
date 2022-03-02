@@ -30,8 +30,8 @@ jobs:
         mvn -B package --file WebApp/pom.xml
         mkdir target && cp WebApp/target/*.jar target
    #Run Tests
-    - name: Run Tests
-      run: mvn -B test
+   #- name: Run Tests
+   #  run: mvn -B test
     # Validate Packer
     - name: Validate AMI Packer Template
       uses: hashicorp/packer-github-actions@master
