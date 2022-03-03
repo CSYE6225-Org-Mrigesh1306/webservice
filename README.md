@@ -1,39 +1,15 @@
 
 # Assignment #04 - Packers and AMIs
 
-### Tech stack :
-**Programming language :** Java
-**Framework :** Springboot
+### Building Custom AMI Using Packer :
+**Custom AMI :** Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type (**ami-033b95fb8079dc481**)
+**Software Installed :** Java, Mysql
 
-**API :** 
-**GET -** http://localhost:8080/spring2022-csye6225/app/1.0.0/healthz
-
-###Steps to Run Project : 
-
- 
-**Step 1 :** Clone the project
-
-git clone git@github.com:CSYE6225-Org-Mrigesh1306/webservice.git
-
-**Step 2 :** Go to Directory
-
-cd ./webservice/WebApp
-
-**Step 3 :** Run the Application
-
-./mvnw spring-boot:run
-
-
-**Step 4 :** Run the Test Cases
-
-./mvnw test
-
-
-**Step 5 :** Test the API
-
-curl http://localhost:8080/spring2022-csye6225/app/1.0.0/healthz
-
-
+**Created EC2 instance using Cloudformation Template** 
+**Instance Type**       t2.micro
+**Protect against accidental termination**	No
+**Root Volume Size**	20
+**Root Volume Type**	General Purpose SSD (GP2)
 
 
 

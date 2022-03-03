@@ -1,4 +1,4 @@
-#Asignment-1 Workflow
+#signment-1 Workflow
 
 name: pull request check workflow
 
@@ -16,14 +16,14 @@ jobs:
   
    steps:
     - name: checkout repository
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     #Set up JDK 11
     - name: Set up JDK
       uses: actions/setup-java@v2
       with:
           java-version: '11'
           distribution: 'adopt'
-          cache: maven
+
     #Set up Maven cache
     - name: Build with Maven
       run: |
