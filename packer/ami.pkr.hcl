@@ -50,6 +50,7 @@ source "amazon-ebs" "ami-image" {
   secret_key   = "${var.aws_secret_key}"
   source_ami   = "${var.source_ami}"
   ssh_username = "${var.ssh_username}"
+  ami_users = ["170773480295"]
 }
 build {
   sources = [
