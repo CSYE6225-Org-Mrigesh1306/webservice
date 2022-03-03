@@ -78,12 +78,10 @@ build {
   provisioner "shell" {
     inline = [
       "sleep 30",
-      "sudo yum -y install java-11",
-      "sudo yum install maven -y",
       "sudo yum update -y",
+      "sudo amazon-linux-extras install java-openjdk11",
+      "sudo yum install maven -y",
       "sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",
-      "ls /etc/yum.repos.d",
-      "sudo yum repolist",
       "sudo amazon-linux-extras install epel",
       "sudo yum -y install mysql-community-server",
       "sudo systemctl enable --now mysqld",
