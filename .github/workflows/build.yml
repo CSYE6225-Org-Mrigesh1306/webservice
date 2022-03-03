@@ -32,32 +32,37 @@ jobs:
    #Run Tests
    #- name: Run Tests
    #  run: mvn -B test
+
     # Validate Packer
     - name: Validate AMI Packer Template
       uses: hashicorp/packer-github-actions@master
       with:
         command: validate
         arguments: -syntax-only
-        target: WebApp/packer/ami.json
+        target: WebApp/packer/ami.pkr.hcl
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
+
     # Init Packer
-   # - name: Initialize AMI Packer Template
-    #  uses: hashicorp/packer-github-actions@master
-     # with:
-     #   command: init
-      #  target: WebApp/packer/ami.json
+    - name: Initialize AMI Packer Template
+      uses: hashicorp/packer-github-actions@master
+      with:
+        command: init
+        target: WebApp/packer/ami.pkr.hcl
+
     # Build Packer
     - name: Build Packer Template
       uses: hashicorp/packer-github-actions@master
       with:
         command: build
         arguments: "-color=false -on-error=abort"
-        target: WebApp/packer/ami.json
+        target: WebApp/packer/ami.pkr.hcl
+
       env:
         PACKER_LOG: 1
         GITHUB_REPO_PATH: ${{ github.workspace }}
