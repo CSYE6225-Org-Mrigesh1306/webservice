@@ -1,0 +1,69 @@
+{
+    "variables": {
+        "region": "us-east-1",
+        "aws_access_key_id": "{{ env `AWS_ACCESS_KEY_ID` }}",
+        "aws_secret_access_key": "{{ env `AWS_SECRET_ACCESS_KEY` }}",
+        "source_ami": "ami-033b95fb8079dc481",
+        "github_repo": "{{env `GITHUB_REPO_PATH` }}"
+    },
+    "builders": [{
+        "type": "amazon-ebs",
+        "name": "ami-image",
+        "profile": "default",
+        "access_key": "{{ user `AWS_ACCESS_KEY_ID` }}",
+        "secret_key": "{{ user `AWS_SECRET_ACCESS_KEY` }}",
+        "source_ami": "{{user `source_ami`}}",
+        "ssh_username": "ec2-user",
+        "region": "{{user `aws_region`}}",
+        "ami_users": ["170773480295"],
+        "instance_type": "t2.micro",
+        "ami_name": "csye6225_{{timestamp}}",
+        "ami_description": "Amazon Linux-2 AMI for CSYE 6225",
+        "run_tags": {
+            "Name": "Packer-Builder"
+        },
+        "launch_block_device_mappings": [{
+            "device_name": "/dev/xvda",
+            "volume_size": 8,
+            "volume_type": "gp2",
+            "delete_on_termination": true
+        }]
+    }],
+    "provisioners": [{
+            "type": "file",
+            "source": "{{user `github_repo`}}/packer/webapp.service",
+            "destination": "/tmp/webapp.service"
+
+        }, {
+            "type": "file",
+            "source": "{{user `github_repo`}}/target/WebApp-0.0.1-SNAPSHOT.jar",
+            "destination": "/tmp/WebApp-0.0.1-SNAPSHOT.jar"
+
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sleep 30",
+                "sudo yum -y install java-11",
+                "sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",
+                "ls /etc/yum.repos.d",
+                "sudo yum repolist",
+                "sudo amazon-linux-extras install epel -y",
+                "sudo yum -y install mysql-community-server",
+                "sudo systemctl enable --now mysqld",
+                "systemctl status mysqld",
+                "pass=$(sudo grep 'temporary password' /var/log/mysqld.log | awk {'print $13'})",
+                "mysql --connect-expired-password -u root -p$pass -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Mrig@1306';\"",
+                "mysql -u root -pMrig@1306 -e \"create database users;\"",
+                "mkdir webservice-target",
+                "cd webservice-target",
+                "sudo cp /tmp/WebApp-0.0.1-SNAPSHOT.jar WebApp-0.0.1-SNAPSHOT.jar",
+                "sudo cp /tmp/webapp.service /etc/systemd/system/",
+                "sudo systemctl daemon-reload",
+                "sudo systemctl enable webapp.service",
+                "sudo systemctl start webapp.service",
+                "sudo systemctl status webapp.service"
+            ]
+        }
+    ]
+}
