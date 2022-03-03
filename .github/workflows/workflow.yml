@@ -1,7 +1,6 @@
-#signment-1 Workflow
+#Webapp Workflow
 
-name: pull request check workflow
-
+name: pull- request check workflow
 on:
   push:
     branches:
