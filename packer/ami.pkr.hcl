@@ -37,9 +37,20 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 
 source "amazon-ebs" "ami-image" {
   access_key      = "${var.aws_access_key}"
-  ami_description = "Ubuntu AMI for CSYE 6225"
-  ami_name        = "csye6225_spring2022_${local.timestamp}"
+  ami_description = "Amazon Linux 2 AMI for CSYE 6225"
+  ami_name        = "Csye6225__${local.timestamp}"
+  ami_users = ["170773480295"]
   instance_type   = "t2.micro"
+  name= "Packer-Build"
+  source_ami_filter {
+    filters = {
+      virtualization-type = "hvm"
+      name                = "amzn2-ami-kernel-5.10-hvm*"
+      root-device-type    = "ebs"
+    }
+    owners      = ["amazon"]
+    most_recent = true
+  }
   launch_block_device_mappings {
     delete_on_termination = true
     device_name           = "/dev/xvda"
@@ -50,7 +61,7 @@ source "amazon-ebs" "ami-image" {
   secret_key   = "${var.aws_secret_key}"
   source_ami   = "${var.source_ami}"
   ssh_username = "${var.ssh_username}"
-  ami_users = ["170773480295"]
+  
 }
 build {
   sources = [
