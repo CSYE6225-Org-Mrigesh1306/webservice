@@ -40,11 +40,11 @@ jobs:
         arguments: -syntax-only
         target: WebApp/packer/ami.json
     # Init Packer
-    - name: Initialize AMI Packer Template
-      uses: hashicorp/packer-github-actions@master
-      with:
-        command: init
-        target: WebApp/packer/ami.json
+   # - name: Initialize AMI Packer Template
+    #  uses: hashicorp/packer-github-actions@master
+     # with:
+     #   command: init
+      #  target: WebApp/packer/ami.json
     # Build Packer
     - name: Build Packer Template
       uses: hashicorp/packer-github-actions@master
