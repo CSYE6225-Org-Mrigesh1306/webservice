@@ -16,7 +16,7 @@ jobs:
   
    steps:
     - name: checkout repository
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
     #Set up JDK 11
     - name: Set up JDK
       uses: actions/setup-java@v2
