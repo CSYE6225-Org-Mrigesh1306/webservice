@@ -1,5 +1,5 @@
 
-# Assignment #04 changes:
+# Assignment #04 - Packers and AMIs
 
 ### Tech stack :
 **Programming language :** Java
