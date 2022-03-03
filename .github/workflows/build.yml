@@ -1,4 +1,4 @@
-#Asignment-1 Workflow
+#signment-1 Workflow
 
 name: pull request check workflow
 
@@ -23,7 +23,7 @@ jobs:
       with:
           java-version: '11'
           distribution: 'adopt'
-          cache: maven
+
     #Set up Maven cache
     - name: Build with Maven
       run: |
