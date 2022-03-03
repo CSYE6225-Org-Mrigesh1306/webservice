@@ -1,4 +1,4 @@
-#Assignment-1 Workflow
+#Asignment-1 Workflow
 
 name: pull request check workflow
 
@@ -44,7 +44,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+        aws-region: us-east-1
     # Init Packer
    # - name: Initialize AMI Packer Template
     #  uses: hashicorp/packer-github-actions@master
