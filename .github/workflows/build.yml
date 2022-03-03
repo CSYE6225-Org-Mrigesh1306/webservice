@@ -38,20 +38,20 @@ jobs:
       with:
         command: validate
         arguments: -syntax-only
-        target: ./packer/ami.json
+        target: WebApp/packer/ami.json
     # Init Packer
     - name: Initialize AMI Packer Template
       uses: hashicorp/packer-github-actions@master
       with:
         command: init
-        target: ./packer/ami.json
+        target: WebApp/packer/ami.json
     # Build Packer
     - name: Build Packer Template
       uses: hashicorp/packer-github-actions@master
       with:
         command: build
         arguments: "-color=false -on-error=abort"
-        target: ./packer/ami.json
+        target: WebApp/packer/ami.json
       env:
         PACKER_LOG: 1
         GITHUB_REPO_PATH: ${{ github.workspace }}
