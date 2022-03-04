@@ -41,7 +41,6 @@ source "amazon-ebs" "ami-image" {
   ami_name        = "AMI-Csye6225-${local.timestamp}"
   ami_users = ["170773480295"]
   instance_type   = "t2.micro"
-  name= "Packer"
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
