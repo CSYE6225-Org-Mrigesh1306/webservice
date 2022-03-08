@@ -77,8 +77,8 @@ build {
   provisioner "shell" {
     inline = [
       "sleep 30",
-      "sudo yum update -y",
-      "echo Java Installation",
+      "sudo yum update -y"
+      "echo Java Installation"
       "sudo amazon-linux-extras install java-openjdk11",
       "sudo yum install maven -y",
       "java -version",
