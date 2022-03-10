@@ -38,10 +38,9 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 source "amazon-ebs" "ami-image" {
   access_key      = "${var.aws_access_key}"
   ami_description = "Amazon Linux 2 AMI for CSYE 6225"
-  ami_name        = "Csye6225-${local.timestamp}"
+  ami_name        = "AMI-Csye6225-${local.timestamp}"
   ami_users = ["170773480295"]
   instance_type   = "t2.micro"
-  name= "Packer"
   source_ami_filter {
     filters = {
       virtualization-type = "hvm"
@@ -79,10 +78,10 @@ build {
     inline = [
       "sleep 30",
       "sudo yum update -y",
-      "echo Java Installation"
+      "echo Java Installation",
       "sudo amazon-linux-extras install java-openjdk11",
       "sudo yum install maven -y",
-      "java -version"
+      "java -version",
       "sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",
       "sudo amazon-linux-extras install epel",
       "sudo yum -y install mysql-community-server",

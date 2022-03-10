@@ -41,7 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll().and().headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**")
 				.disable().authorizeRequests().antMatchers("/*").permitAll().antMatchers(HttpMethod.POST, "/v1/users")
 				.permitAll().antMatchers(HttpMethod.GET, "/v1/users/self").permitAll()
-				.antMatchers(HttpMethod.PUT, "/v1/users/self").permitAll().antMatchers(HttpMethod.GET, "/healthz")
+				.antMatchers(HttpMethod.PUT, "/v1/users/self").permitAll()
+				.antMatchers(HttpMethod.GET, "/v1/users/self/pic").permitAll()
+				.antMatchers(HttpMethod.POST, "/v1/users/self/pic").permitAll()
+				.antMatchers(HttpMethod.DELETE, "/v1/users/self/pic").permitAll()
+				.antMatchers(HttpMethod.GET, "/healthz")
 				.permitAll().anyRequest().authenticated().and().cors().disable();
 
 	}
