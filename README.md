@@ -1,5 +1,5 @@
 
-# Assignment #04 - Packers and AMIs
+# Assignment #05 - Infrastructure code with Cloudformation
 
 ### Building Custom AMI Using Packer :
 **Custom AMI :** Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type (**ami-033b95fb8079dc481**)
