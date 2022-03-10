@@ -2,7 +2,8 @@
 Description=webapp
 After=syslog.target
 
-
+[Install]
+WantedBy=multi-user.target
 
 [Service]
 User=ec2-user
@@ -12,5 +13,3 @@ RemainAfterExit=yes
 
 
 
-[Install]
-WantedBy=multi-user.target

@@ -38,7 +38,7 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 source "amazon-ebs" "ami-image" {
   access_key      = "${var.aws_access_key}"
   ami_description = "Amazon Linux 2 AMI for CSYE 6225"
-  ami_name        = "AMI-Csye6225-${local.timestamp}"
+  ami_name        = "A05-Csye6225-${local.timestamp}"
   ami_users = ["170773480295"]
   instance_type   = "t2.micro"
   source_ami_filter {
@@ -82,23 +82,10 @@ build {
       "sudo amazon-linux-extras install java-openjdk11",
       "sudo yum install maven -y",
       "java -version",
-      "sudo yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm",
-      "sudo amazon-linux-extras install epel",
-      "sudo yum -y install mysql-community-server",
-      "sudo systemctl enable --now mysqld",
-      "systemctl status mysqld",
-      "pass=$(sudo grep 'temporary password' /var/log/mysqld.log | awk {'print $13'})",
-      "mysql --connect-expired-password -u root -p$pass -e \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'Mrig@1306';\"",
-      "mysql -u root -pMrig@1306 -e \"create database book_mgnt;\"",
       "pwd",
       "mkdir webservice-target",
       "cd webservice-target",
-      "sudo cp /tmp/WebApp-0.0.1-SNAPSHOT.jar WebApp-0.0.1-SNAPSHOT.jar",
-      "sudo cp /tmp/webapp.service /etc/systemd/system/",
-      "sudo systemctl daemon-reload",
-      "sudo systemctl enable webapp.service",
-      "sudo systemctl start webapp.service",
-      "sudo systemctl status webapp.service"
+      "sudo cp /tmp/WebApp-0.0.1-SNAPSHOT.jar WebApp-0.0.1-SNAPSHOT.jar"
     ]
   }
 }

@@ -2,6 +2,7 @@ package com.example.webapp.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,6 +93,8 @@ public class UserService {
 			user.setPassword(bcryptpass);
 			user.setAccount_created(java.time.Clock.systemUTC().instant().toString());
 			user.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+			Random rand = new Random();
+			user.setId(rand.nextLong());
 
 		} else {
 
