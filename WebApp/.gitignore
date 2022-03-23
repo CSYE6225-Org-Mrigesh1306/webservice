@@ -18,7 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
-
+/.metadata/
+/.metadata/.plugins
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

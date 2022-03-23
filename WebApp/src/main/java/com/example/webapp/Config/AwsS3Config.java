@@ -14,11 +14,11 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 @Configuration
 public class AwsS3Config {
 	
-	@Value("${aws.access_key_id}")
-    private String awsId;
-
-    @Value("${aws.secret_access_key}")
-    private String awsKey;
+//	@Value("${aws.access_key_id}")
+//    private String awsId;
+//
+//    @Value("${aws.secret_access_key}")
+//    private String awsKey;
 
     @Value("${aws.s3.region}")
     private String region;
@@ -27,14 +27,10 @@ public class AwsS3Config {
     @Bean
     public AmazonS3 s3client() {
 
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsId, awsKey);
         AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
-                .withRegion(Regions.fromName(region))
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .withRegion(region)
+                .withCredentials(new InstanceProfileCredentialsProvider(false))
                 .build();
-
         return amazonS3Client;
-
     }
-
 }
