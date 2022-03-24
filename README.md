@@ -1,4 +1,4 @@
-# Assignment-6: IAM Users, Roles & Policies
+# Assignment-6: IAM Users, Roles & Policies(1)
 
 ## Load Balancer Security Group :
 - Create a security group for the load balancer to access the web application.
