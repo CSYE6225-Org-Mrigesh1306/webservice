@@ -38,7 +38,7 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 source "amazon-ebs" "ami-image" {
   access_key      = "${var.aws_access_key}"
   ami_description = "Amazon Linux 2 AMI for CSYE 6225"
-  ami_name        = "A06-Csye6225-${local.timestamp}"
+  ami_name        = "A07-Csye6225-${local.timestamp}"
   ami_users = ["170773480295"]
   instance_type   = "t2.micro"
   source_ami_filter {
@@ -82,6 +82,15 @@ build {
       "sudo amazon-linux-extras install java-openjdk11",
       "sudo yum install maven -y",
       "java -version",
+      "echo Install CodeDeploy",
+      "sudo yum install ruby",
+      "sudo yum install wget",
+      "pwd",
+      "wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install",
+      "chmod +x ./install",
+      "sudo ./install auto",
+      "sudo service codedeploy-agent start",
+      "sudo service codedeploy-agent status",
       "pwd",
       "mkdir webservice-target",
       "cd webservice-target",
