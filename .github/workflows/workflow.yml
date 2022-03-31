@@ -2,9 +2,6 @@
 
 name: pull- request check workflow
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -28,6 +25,7 @@ jobs:
       run: |
         mvn -B package --file WebApp/pom.xml
         mkdir target && cp WebApp/target/*.jar target
+
    #Run Tests
    #- name: Run Tests
    #  run: mvn -B test
@@ -40,6 +38,7 @@ jobs:
         arguments: -syntax-only
         target: packer/ami.pkr.hcl
 
+  # Configure AWS Credentials
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
