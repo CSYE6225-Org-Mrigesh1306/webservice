@@ -44,13 +44,8 @@ jobs:
       run: |
         mkdir codedeploy_artifact
         zip -r webapp-${{ steps.vars.outputs.sha_short }}.zip \
-        pwd
-        ls -al
         ./target/WebApp-0.0.1-SNAPSHOT.jar ./codedeploy/*.sh appspec.yml
-        ls -al
         mv webapp-${{ steps.vars.outputs.sha_short }}.zip ./codedeploy_artifact
-        ls -al
-        pwd
 
     # Copy Artifacts to S3
     - name: Copy Artifacts to S3
