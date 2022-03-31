@@ -1,52 +1,37 @@
 # Assignment-7: CI/CD for Web Application
 
-## Load Balancer Security Group :
-- Create a security group for the load balancer to access the web application.
-- Add ingress rule to allow TCP traffic on ports 80, and 443 from anywhere in the world.
-- This security group will be referred to as the load balancer security group.
+## CI/CD WORKFLOW :
+* Developer commits code changes to GitHub repository.
+* GitHub Actions will trigger a new build on pull request merge.
+* GitHub Actions will run the build steps from the GitHub Actions workflow. Build steps should do the following: 
+    * Run the unit test.
+    * Validate Packer Template
+    * Build AMI (Note: New AMI image is not used in the CI/CD pipeline in this assignment)
+          * Upgrade OS packages
+          * Install dependencies (JAVA, MAVEN)
+          * Install application dependencies
+          * Copy application artifact from step 3.
+    * Zip the artifacts and upload the zip archive to the CodeDeploy's S3 bucket.
+    * Trigger a new CodeDeploy deployment with the latest revision of your artifact.
 
-## AutoScaling Application Stack
-
-| Key                      |   Value                                |
-|--------------------------|----------------------------------------|
-| ImageId                  | Your custom AMI                        |
-| Instance Type            | t2.micro                               |
-| KeyName                  | YOUR_AWS_KEYNAME                       |
-| AssociatePublicIpAddress | True                                   |
-| UserData                 | SAME_USER_DATA_AS_CURRENT_EC2_INSTANCE |
-| IAM Role                 | SAME_AS_CURRENT_EC2_INSTANCE           |
-| Resource Name            | asg_launch_config                    |
-| Security Group           | WebAppSecurityGroup                    |
-
-
-
-## AutoScaling Group
-
-| Paramter                 |   Value           |
-|--------------------------|-------------------|
-| Cooldown                 | 60                |
-| LaunchConfigurationName  | asg_launch_config |
-| MinSize                  | 1                 |
-| MaxSize                  | 5                 |
-| DesiredCapacity          | 1                 |
-
-
-## AutoScaling Policies
-- Scale up policy when average CPU usage is above 5%. Increment by 1.
-- Scale down policy when average CPU usage is below 3%. Decrement by 1.
-
-## Setup Application Load Balancer For Your Web Application
-- EC2 instances launched in the auto-scaling group should now be load balanced.
-- Add a balancer resource to your CloudFormation template.
-- Setup Application load balancer to accept HTTP traffic on port 80 and forward it to your application instances on whatever port it listens on.
-- Attach the load balancer security group to the load balancer.
-
-
-## DNS Updates
-- Route53 should be updated from the CloudFormation template.
-- Route53 resource record for your domain name should now be an alias for your load balancer application.
-- The CloudFormation template should configure Route53 so that your domain points to your load balancer and your web application is accessible thru http://your-domain-name.tld/
-- Your application must be accessible using root context i.e. http://your-domain-name.tld/ (Links to an external site.) and not http://your-domain-name.tld/app-0.1/
+## IAM SETUP
+* [CodeDeploy-EC2-S3]() policy allows EC2 instances to read data from S3 buckets. This policy is required for EC2 instances to download the latest
+application revision.
+* [GH-Code-Deploy]() policy allows GitHub Actions to call CodeDeploy APIs to initiate application deployment on EC2 instances.
+* [GH-Upload-To-S3]() policy allows GitHub Actions to upload artifacts from the latest successful build to the dedicated S3 bucket used by CodeDeploy.
 
 
 
+## CodeDeploy Application
+- Application Name - **csye6225-webapp**
+- Compute Platform - **EC2/On-premises**
+
+## CodeDeploy Deployment Group
+- Deployment group name - **csye6225-webapp-deployment**
+- Service role - **CodeDeployServiceRole**
+- Deployment type - **In-place**
+- Environment Configuration - **Amazon EC2 Instances**
+- Deployment settings - **CodeDeployDefault.AllAtOnce**
+- Load Balancer - **disabled**
+- Rollback - **Rollback when a deployment fails**
+- Everything else can be left to default values.
