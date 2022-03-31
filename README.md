@@ -1,4 +1,4 @@
-# Assignment-6: IAM Users, Roles & Policies(1)
+# Assignment-7: CI/CD for Web Application
 
 ## Load Balancer Security Group :
 - Create a security group for the load balancer to access the web application.

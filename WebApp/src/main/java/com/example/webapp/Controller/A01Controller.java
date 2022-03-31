@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class A01Controller {
 	
-	@GetMapping(value="/health",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/healthz",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getStatus() {
 		return new ResponseEntity<>("Successfull",HttpStatus.OK);
 	}
