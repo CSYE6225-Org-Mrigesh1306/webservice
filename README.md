@@ -27,11 +27,11 @@ application revision.
 - Compute Platform - **EC2/On-premises**
 
 ## CodeDeploy Deployment Group
-- Deployment group name - **csye6225-webapp-deployment
-- Service role - **CodeDeployServiceRole
-- Deployment type - **In-place
-- Environment Configuration - **Amazon EC2 Instances
-- Deployment settings - **CodeDeployDefault.AllAtOnce
-- Load Balancer - **disabled
-- Rollback - **Rollback when a deployment fails
+- Deployment group name - **csye6225-webapp-deployment**
+- Service role - **CodeDeployServiceRole**
+- Deployment type - **In-place**
+- Environment Configuration - **Amazon EC2 Instances**
+- Deployment settings - **CodeDeployDefault.AllAtOnce**
+- Load Balancer - **disabled**
+- Rollback - **Rollback when a deployment fails**
 - Everything else can be left to default values.
