@@ -38,7 +38,7 @@ locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
 source "amazon-ebs" "ami-image" {
   access_key      = "${var.aws_access_key}"
   ami_description = "Amazon Linux 2 AMI for CSYE 6225"
-  ami_name        = "A08-Csye6225-${local.timestamp}"
+  ami_name        = "A08-CSYE6225-${local.timestamp}"
   ami_users = ["170773480295"]
   instance_type   = "t2.micro"
   source_ami_filter {
