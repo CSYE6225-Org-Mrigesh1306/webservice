@@ -74,6 +74,10 @@ build {
       destination = "/tmp/WebApp-0.0.1-SNAPSHOT.jar"
       source      = "${var.github_repo}/target/WebApp-0.0.1-SNAPSHOT.jar"
   }
+  provisioner "file" {
+      destination = "/home/ec2-user/cloudwatch-config.json"
+      source      = "${var.github_repo}/cloudwatch_config.json"
+  }
   provisioner "shell" {
     inline = [
       "sleep 30",
