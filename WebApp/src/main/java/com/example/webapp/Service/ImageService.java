@@ -1,32 +1,25 @@
 package com.example.webapp.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.example.webapp.Controller.UserController;
 import com.example.webapp.DAO.ImageRepository;
 import com.example.webapp.DAO.UserRepository;
 import com.example.webapp.Model.Image;
 import com.example.webapp.Model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class ImageService {
@@ -59,7 +52,7 @@ public class ImageService {
 				
 			}
 		}
-
+		logger.info("Image Found for user "+user.get(0).getId());
 		return userImage;
 
 		
@@ -74,7 +67,8 @@ public class ImageService {
 		for(Image i : allImages ) {
 			
 			if(i.getUser_id() == user.get(0).getId() ) {
-				
+
+				logger.info("User Exists ");
 				isUserExists=true;
 				
 			}
@@ -87,7 +81,7 @@ public class ImageService {
 				if(i.getUser_id() == user.get(0).getId() ) {
 					
 					imageRepository.delete(i);
-					
+					logger.info("Deleted existing UserImage from S3 bucket ");
 					deleteFileFromS3Bucket(i.getUrl(),user.get(0).getId());
 					
 				}
@@ -114,7 +108,7 @@ public class ImageService {
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentLength(imagefile.getSize());
 			amazonS3Client.putObject(bucketName, key, imagefile.getInputStream(), metadata);
-
+			logger.info("Image uploaded to S3 bucket ");
 			return bucketName;
 		} catch (IOException ioe) {
 			logger.error("IOException: " + ioe.getMessage());

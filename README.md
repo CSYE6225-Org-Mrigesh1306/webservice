@@ -1,25 +1,19 @@
-# Assignment-7: CI/CD for Web Application
+# Assignment-8: Application Logging & Metrics
 
-## CI/CD WORKFLOW :
-* Developer commits code changes to GitHub repository.
-* GitHub Actions will trigger a new build on pull request merge.
-* GitHub Actions will run the build steps from the GitHub Actions workflow. Build steps should do the following: 
-    * Run the unit test.
-    * Validate Packer Template
-    * Build AMI (Note: New AMI image is not used in the CI/CD pipeline in this assignment)
-          * Upgrade OS packages
-          * Install dependencies (JAVA, MAVEN)
-          * Install application dependencies
-          * Copy application artifact from step 3.
-    * Zip the artifacts and upload the zip archive to the CodeDeploy's S3 bucket.
-    * Trigger a new CodeDeploy deployment with the latest revision of your artifact.
+## AMI Updates :
+* Update your packer template to install. the Unified CloudWatch Agent in your AMIs.
+* Your CloudWatch agent must be set up to start automatically when an EC2 instance is launched using your AMI.
+* Note that until CodeDeploy deploys the application on the EC2 instance, the CloudWatch agent may not work 
+    * You should restart the CloudWatch agent in your after install CodeDeploy lifecycle hook.
 
-## IAM SETUP
-* [CodeDeploy-EC2-S3]() policy allows EC2 instances to read data from S3 buckets. This policy is required for EC2 instances to download the latest
-application revision.
-* [GH-Code-Deploy]() policy allows GitHub Actions to call CodeDeploy APIs to initiate application deployment on EC2 instances.
-* [GH-Upload-To-S3]() policy allows GitHub Actions to upload artifacts from the latest successful build to the dedicated S3 bucket used by CodeDeploy.
-
+## WebApp User Stories
+* As a user, I want all application log data to be available in CloudWatch.
+* As a user, I want metrics on API usage available in CloudWatch.
+* Create the following custom metrics for every API we have implemented in the web application. The metrics data should be collected in CloudWatch.
+    * Count the number of times each API is called.
+* You can retrieve custom metrics using either StatsD
+* CloudWatch agent configuration file must be copied over to the EC2 server when the application is being deployed by CodeDeploy.
+* RE) Configure the CloudWatch agent before starting your service in the afterInstall hook of the CodeDeploy lifecycle.
 
 
 ## CodeDeploy Application

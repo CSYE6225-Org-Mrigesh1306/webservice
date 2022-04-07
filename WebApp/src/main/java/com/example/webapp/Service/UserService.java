@@ -1,9 +1,9 @@
 package com.example.webapp.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.example.webapp.Controller.UserController;
+import com.example.webapp.DAO.UserRepository;
+import com.example.webapp.Model.User;
+import com.example.webapp.Validations.CustomValidations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.webapp.Controller.UserController;
-import com.example.webapp.DAO.UserRepository;
-import com.example.webapp.Model.User;
-import com.example.webapp.Validations.CustomValidations;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Repository
 public class UserService {
@@ -46,11 +45,13 @@ public class UserService {
 				boolean isPassMatch = passwordEncoder.matches(creds[1], u.getPassword());
 				
 				if (isPassMatch) {
-					
+
+					logger.info("** User Exists **");
 					userdetails.add(u);
 
 				} else {
 
+					logger.error("** Incorrect Username/password **");
 					throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Username/password");
 
 				}
@@ -65,7 +66,7 @@ public class UserService {
 
 	public User createUser(User user) {
 
-		logger.info("## Create New User ##");
+		logger.info("*** Create New User ***");
 
 		boolean isValid = customValidator.fieldValidations(user);
 
@@ -77,6 +78,7 @@ public class UserService {
 
 				if (u.getUsername().equalsIgnoreCase(user.getUsername())) {
 
+					logger.error("User Already exists. Try New username or password");
 					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
 							"User Already exists. Try New username or password");
 
@@ -85,10 +87,12 @@ public class UserService {
 
 			if (!customValidator.isEmailValid(user.getUsername())) {
 
+				logger.error("Invalid Email Id Format");
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Email Id Format");
 
 			}
 
+			logger.info("*** User Crendentials are valid format ***");
 			String bcryptpass = passwordEncoder.encode(user.getPassword());
 			user.setPassword(bcryptpass);
 			user.setAccount_created(java.time.Clock.systemUTC().instant().toString());
@@ -97,11 +101,11 @@ public class UserService {
 			user.setId(rand.nextLong());
 
 		} else {
-
+			logger.error("All fields are mandatory");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All fields are mandatory");
 
 		}
-
+		logger.info("*** New User has been Created ***");
 		return userrepo.save(user);
 
 	}
@@ -134,9 +138,11 @@ public class UserService {
 						userrepo.save(u);
 						isUpdated = true;
 						isPresent = true;
+						logger.info("*** User Information has been Updated ***");
 						break;
 					} else {
 
+						logger.error("Incorrect Username/password");
 						throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Username/password");
 
 					}
@@ -145,11 +151,13 @@ public class UserService {
 			}
 			if (!isPresent) {
 
+				logger.error("User Does Not Exist. Please Check username or password");
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
 						"User Does Not Exist. Please Check username or password");
 			}
 
 		} else {
+			logger.error("All fields are mandatory");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All fields are mandatory");
 		}
 

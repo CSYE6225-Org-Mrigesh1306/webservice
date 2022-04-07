@@ -1,25 +1,20 @@
 package com.example.webapp.Controller;
 
-import java.util.List;
-import java.util.Map;
-
+import com.example.webapp.Config.SecurityConfig;
+import com.example.webapp.Model.User;
+import com.example.webapp.Service.UserService;
+import com.timgroup.statsd.StatsDClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.webapp.Config.SecurityConfig;
-import com.example.webapp.Model.User;
-import com.example.webapp.Service.UserService;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -29,12 +24,17 @@ public class UserController {
 
 	@Autowired
 	SecurityConfig sconfig;
+
+	@Autowired
+	StatsDClient statsd;
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	// GET
 	@GetMapping(value = "/v1/users/self", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<User>> retrieveAllUsers(@RequestHeader Map<String, String> headers) {
+
+		statsd.incrementCounter("GET.UserDetails.counter");
 
 		String[] credentials = sconfig.decodeBasicAuthentication(headers);
 
@@ -55,6 +55,8 @@ public class UserController {
 	@PostMapping(value = "/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> createUser(@RequestBody User user) {
 
+		statsd.incrementCounter("POST.UserDetails.counter");
+
 		User newUser = service.createUser(user);
 
 		return new ResponseEntity<>(newUser, HttpStatus.CREATED);
@@ -64,6 +66,7 @@ public class UserController {
 	@PutMapping(value = "/v1/users/self", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<User> updateUser(@RequestBody User user,@RequestHeader Map<String, String> headers) {
 
+		statsd.incrementCounter("PUT.UserDetails.counter");
 		
 		String[] credentials = sconfig.decodeBasicAuthentication(headers);
 		
