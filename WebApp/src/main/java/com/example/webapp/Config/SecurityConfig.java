@@ -39,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests().antMatchers("/*").permitAll().and().authorizeRequests().antMatchers("/h2-console/**")
 				.permitAll().and().headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**")
-				.disable().authorizeRequests().antMatchers("/*").permitAll().antMatchers(HttpMethod.POST, "/v1/users")
-				.permitAll().antMatchers(HttpMethod.GET, "/v1/users/self").permitAll()
+				.disable().authorizeRequests().antMatchers("/*").permitAll().antMatchers(HttpMethod.POST, "/v2/users")
+				.permitAll().antMatchers(HttpMethod.GET, "/v2/users/self").permitAll()
 				.antMatchers(HttpMethod.PUT, "/v1/users/self").permitAll()
 				.antMatchers(HttpMethod.GET, "/v1/users/self/pic").permitAll()
 				.antMatchers(HttpMethod.POST, "/v1/users/self/pic").permitAll()
