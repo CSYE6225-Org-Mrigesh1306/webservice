@@ -1,4 +1,4 @@
-# Assignment-8: Application Logging & Metrics
+# Demo7,8 Assignment-8: Application Logging & Metrics
 
 ## AMI Updates :
 * Update your packer template to install. the Unified CloudWatch Agent in your AMIs.
