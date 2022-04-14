@@ -119,50 +119,75 @@ public class UserService {
 		boolean isUpdated = false;
 		boolean isPresent = false;
 
-		if (isValid) {
+		if(user.isIs_Verified()) {
 
-			List<User> allusers = userrepo.findAll();
+			if (isValid) {
 
-			for (User u : allusers) {
+				List<User> allusers = userrepo.findAll();
 
-				if (customValidator.isUserExists(creds, u)) {
+				for (User u : allusers) {
 
-					boolean isPassMatch = passwordEncoder.matches(creds[1], u.getPassword());
+					if (customValidator.isUserExists(creds, u)) {
 
-					if (isPassMatch) {
-						u.setPassword(passwordEncoder.encode(user.getPassword()));
-						u.setFirst_name(user.getFirst_name());
-						u.setLast_name(user.getLast_name());
-						u.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
+						boolean isPassMatch = passwordEncoder.matches(creds[1], u.getPassword());
 
-						userrepo.save(u);
-						isUpdated = true;
-						isPresent = true;
-						logger.info("*** User Information has been Updated ***");
-						break;
-					} else {
+						if (isPassMatch) {
+							u.setPassword(passwordEncoder.encode(user.getPassword()));
+							u.setFirst_name(user.getFirst_name());
+							u.setLast_name(user.getLast_name());
+							u.setAccount_updated(java.time.Clock.systemUTC().instant().toString());
 
-						logger.error("Incorrect Username/password");
-						throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Username/password");
+							userrepo.save(u);
+							isUpdated = true;
+							isPresent = true;
+							logger.info("*** User Information has been Updated ***");
+							break;
+						} else {
+
+							logger.error("Incorrect Username/password");
+							throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Username/password");
+
+						}
 
 					}
-
 				}
-			}
-			if (!isPresent) {
+				if (!isPresent) {
 
-				logger.error("User Does Not Exist. Please Check username or password");
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-						"User Does Not Exist. Please Check username or password");
-			}
+					logger.error("User Does Not Exist. Please Check username or password");
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+							"User Does Not Exist. Please Check username or password");
+				}
 
-		} else {
-			logger.error("All fields are mandatory");
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All fields are mandatory");
+			} else {
+				logger.error("All fields are mandatory");
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "All fields are mandatory");
+			}
+		}else {
+			logger.error("User "+user.getUsername()+" not verified");
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User "+user.getUsername()+" not verified");
 		}
 
 		return isUpdated;
 
+	}
+	public void updateUserToken(String email){
+
+		//check if email has space
+		if(email.indexOf(' ', 0)!=-1) {
+			email.replace(' ', '+');
+		}
+
+		List<User> existingUsers = userrepo.findAll();
+
+		for(User u : existingUsers){
+			if(u.getUsername().equalsIgnoreCase(email)){
+				logger.info("For username: "+u.getUsername()+" before :"+u.isIs_Verified());
+				u.setIs_Verified(true);
+				logger.info("For username: "+u.getUsername()+" after :"+u.isIs_Verified());
+				userrepo.save(u);
+				logger.info("For username: "+u.getUsername()+" updated in Table");
+			}
+		}
 	}
 
 }
