@@ -190,8 +190,4 @@ public class UserService {
 		}
 	}
 
-	public boolean isUserVerified(){
-
-	}
-
 }
