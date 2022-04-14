@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
- pr-check:
+ pullrequest-check:
    runs-on: ubuntu-latest
   
    steps:

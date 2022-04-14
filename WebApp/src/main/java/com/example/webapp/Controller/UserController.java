@@ -34,8 +34,14 @@ public class UserController {
     @Autowired
     StatsDClient statsd;
 
+<<<<<<< HEAD
     @Autowired
     EmailSNSService snsService;
+=======
+	// GET
+	@GetMapping(value = "/v2/users/self", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<User>> retrieveAllUsers(@RequestHeader Map<String, String> headers) {
+>>>>>>> a976888b04fa41b1eec9b233ed88e67093038f77
 
     private DynamoDB dynamoDB;
 
@@ -51,7 +57,13 @@ public class UserController {
 
         List<User> users = service.retrieveUser(credentials);
 
+<<<<<<< HEAD
         logger.info("User " + users);
+=======
+	// POST
+	@PostMapping(value = "/v2/users", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<User> createUser(@RequestBody User user) {
+>>>>>>> a976888b04fa41b1eec9b233ed88e67093038f77
 
         if (users == null || users.size() == 0) {
 
