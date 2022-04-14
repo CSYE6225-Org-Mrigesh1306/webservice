@@ -42,7 +42,7 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // GET
-    @GetMapping(value = "/v1/users/self", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v2/users/self", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<User>> retrieveAllUsers(@RequestHeader Map<String, String> headers) {
 
         statsd.incrementCounter("GET.UserDetails.counter");
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     // POST
-    @PostMapping(value = "/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/v2/users", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createUser(@RequestBody User user) {
 
         statsd.incrementCounter("POST.UserDetails.counter");
