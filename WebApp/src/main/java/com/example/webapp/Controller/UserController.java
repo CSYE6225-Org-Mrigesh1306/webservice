@@ -3,7 +3,7 @@ package com.example.webapp.Controller;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.GetItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.example.webapp.Config.SecurityConfig;
 import com.example.webapp.Model.User;
@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -96,31 +98,51 @@ public class UserController {
     @GetMapping("/verifyUserEmail")
     public ResponseEntity<String> verifedUserUpdate(@RequestParam("email") String email,
                                                     @RequestParam("token") String token) {
+
         String result = "not verfied get";
         try {
-            System.out.println("in post");
+            //System.out.println("in post");
             //check if token is still valid in EmailID_Data
 
             // confirm dynamoDB table exists
-
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
             dynamoDB = new DynamoDB(client);
+            logger.info("Get /verifyUserEmail");
+            Table userEmailsTable = dynamoDB.getTable("UsernameTokenTable");
+            if (userEmailsTable == null) {
+                logger.info("Table 'UsernameTokenTable' is not in dynamoDB.");
+                return null;
+            }
 
-            Table userEmailsTable = dynamoDB.getTable("TokenTable");
-            GetItemOutcome outcome = userEmailsTable.getItemOutcome("emailID", email);
+            if (email.indexOf(" ", 0) != -1) {
+                email = email.replace(" ", "+");
+            }
+            Item item = userEmailsTable.getItem("emailID", email);
+            logger.info("item= " + item);
+            if (item == null) {
+                result = "token expired !!!";
+            } else {
+                BigDecimal tokentime = (BigDecimal) item.get("TimeToLive");
 
-            logger.info(outcome.getItem().toJSON());
-            result = "verified success get";
+                long now = Instant.now().getEpochSecond(); // unix time
+                long timereminsa = now - tokentime.longValue(); // 2 mins in sec
+                logger.info("tokentime: " + tokentime);
+                logger.info("now: " + now);
+                logger.info("remins: " + timereminsa);
+                if (timereminsa > 0) {
+                    result = "token has expired";
+                } else {
+                    result = "verified successfully!!!";
+                    service.updateUserToken(email);
+                }
 
-
-            logger.info("here......");
-            service.updateUserToken(email);
+            }
 
         } catch (Exception e) {
             System.out.println(e);
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
-}
+    }
 
 }
