@@ -113,7 +113,7 @@ public class UserController {
             Table userEmailsTable = dynamoDB.getTable("UsernameTokenTable");
             if (userEmailsTable == null) {
                 logger.error("Table 'UsernameTokenTable' is not in dynamoDB.");
-                return null;
+                return new ResponseEntity<>("Unable to verify User!",HttpStatus.BAD_REQUEST);
             }
 
             if (email.indexOf(" ", 0) != -1) {
@@ -124,6 +124,7 @@ public class UserController {
             if (item == null) {
                 result = "token expired !!!";
                 logger.error("Token Expired");
+                return new ResponseEntity<>("Unique Link has Expired",HttpStatus.BAD_REQUEST);
             } else {
                 BigDecimal tokentime = (BigDecimal) item.get("TimeToLive");
                 logger.info("item= " + item);
@@ -135,10 +136,12 @@ public class UserController {
                 if (timereminsa > 0) {
                     result = "token has expired";
                     logger.error("Token Expired");
+                    return new ResponseEntity<>("Unique Link has Expired",HttpStatus.BAD_REQUEST);
                 } else {
                     result = "verified successfully!!!";
                     logger.info("verified successfully!!!");
                     service.updateUserToken(email);
+                    return new ResponseEntity<>("Congratulations!!!. You have been verified.",HttpStatus.OK);
                 }
 
             }
