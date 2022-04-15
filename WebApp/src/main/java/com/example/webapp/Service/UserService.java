@@ -171,7 +171,6 @@ public class UserService {
 
 	}
 	public void updateUserToken(String email){
-		logger.info("Here updateUserToken ");
 		//check if email has space
 		if(email.indexOf(' ', 0)!=-1) {
 			email.replace(' ', '+');

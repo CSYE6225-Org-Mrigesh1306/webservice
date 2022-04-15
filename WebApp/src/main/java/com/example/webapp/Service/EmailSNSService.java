@@ -31,12 +31,12 @@ public class EmailSNSService {
     public void postToTopic(String recipientEmail, String requestType) {
 
         try {
-            System.out.println("in sns postToTopic");
             Random rand = new Random();
             int token = rand.nextInt(10000);
             String snsMessage = requestType + "|" + recipientEmail + "|" + token;
 
-            System.out.println("message generated, now publishing");
+            logger.info("Message generated" +snsMessage);
+            logger.info("My SNS ARN"+ snsTopicARN);
 
             PublishRequest request = PublishRequest.builder()
                     .message(snsMessage)
@@ -44,17 +44,17 @@ public class EmailSNSService {
                     .build();
 
             if (snsClient == null) {
-                System.out.println("snsClient object is still   ..........null");
+                logger.info("snsClient NULL");
             }
             SnsClient snsClient = SnsClient.builder()
                     .region(Region.US_EAST_1)
                     .build();
 
             PublishResponse result = snsClient.publish(request);
-            System.out.println("Publishing done");
-            System.out.println("Message " + result.messageId() + "is successfully published to SNS Topic 'Notification_Email'");
-            logger.info("Message " + result.messageId() + " is successfully published to SNS Topic 'Notification_Email'.");
+            logger.info("Message sent to SNSTopic");
 
+            //Store token in Dynamodb
+            logger.info("Store User info in DynamoDB");
             tokenrepo.storeUserTokenDynamoDB(recipientEmail,token);
 
         } catch (SnsException e) {
