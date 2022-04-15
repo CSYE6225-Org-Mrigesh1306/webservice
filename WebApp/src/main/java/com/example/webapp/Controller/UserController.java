@@ -98,6 +98,8 @@ public class UserController {
     @GetMapping("/verifyUserEmail")
     public ResponseEntity<String> verifedUserUpdate(@RequestParam("email") String email,
                                                     @RequestParam("token") String token) {
+
+        logger.info("Hello "+email);
         logger.info("*****/verifyUserEmail***");
         logger.info("email "+email);
         String result = "not verfied get";
