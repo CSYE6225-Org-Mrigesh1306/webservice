@@ -171,14 +171,14 @@ public class UserService {
 
 	}
 	public void updateUserToken(String email){
-
+		logger.info("Here updateUserToken ");
 		//check if email has space
 		if(email.indexOf(' ', 0)!=-1) {
 			email.replace(' ', '+');
 		}
 
 		List<User> existingUsers = userrepo.findAll();
-
+		logger.info("Here updateUserToken 2");
 		for(User u : existingUsers){
 			if(u.getUsername().equalsIgnoreCase(email)){
 				logger.info("For username: "+u.getUsername()+" before :"+u.isIs_Verified());

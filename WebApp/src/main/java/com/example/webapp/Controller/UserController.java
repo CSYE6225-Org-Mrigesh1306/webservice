@@ -98,8 +98,10 @@ public class UserController {
     @GetMapping("/verifyUserEmail")
     public ResponseEntity<String> verifedUserUpdate(@RequestParam("email") String email,
                                                     @RequestParam("token") String token) {
-
+        logger.info("*****/verifyUserEmail***");
+        logger.info("email "+email);
         String result = "not verfied get";
+        logger.info("not verfied get");
         try {
             //System.out.println("in post");
             //check if token is still valid in EmailID_Data
@@ -110,7 +112,7 @@ public class UserController {
             logger.info("Get /verifyUserEmail");
             Table userEmailsTable = dynamoDB.getTable("UsernameTokenTable");
             if (userEmailsTable == null) {
-                logger.info("Table 'UsernameTokenTable' is not in dynamoDB.");
+                logger.error("Table 'UsernameTokenTable' is not in dynamoDB.");
                 return null;
             }
 
@@ -121,9 +123,10 @@ public class UserController {
             logger.info("item= " + item);
             if (item == null) {
                 result = "token expired !!!";
+                logger.error("Token Expired");
             } else {
                 BigDecimal tokentime = (BigDecimal) item.get("TimeToLive");
-
+                logger.info("item= " + item);
                 long now = Instant.now().getEpochSecond(); // unix time
                 long timereminsa = now - tokentime.longValue(); // 2 mins in sec
                 logger.info("tokentime: " + tokentime);
@@ -131,8 +134,10 @@ public class UserController {
                 logger.info("remins: " + timereminsa);
                 if (timereminsa > 0) {
                     result = "token has expired";
+                    logger.error("Token Expired");
                 } else {
                     result = "verified successfully!!!";
+                    logger.info("verified successfully!!!");
                     service.updateUserToken(email);
                 }
 
