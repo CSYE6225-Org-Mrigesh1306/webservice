@@ -1,9 +1,6 @@
 package com.example.webapp.Config;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Map;
-
+import com.example.webapp.Validations.CustomValidations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.webapp.Validations.CustomValidations;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -45,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/v1/users/self/pic").permitAll()
 				.antMatchers(HttpMethod.POST, "/v1/users/self/pic").permitAll()
 				.antMatchers(HttpMethod.DELETE, "/v1/users/self/pic").permitAll()
+				.antMatchers(HttpMethod.GET, "/verifyUserEmail*").permitAll()
 				.antMatchers(HttpMethod.GET, "/healthz")
 				.permitAll().anyRequest().authenticated().and().cors().disable();
 
