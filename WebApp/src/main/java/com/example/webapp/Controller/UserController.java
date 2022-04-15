@@ -94,28 +94,19 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
-    //verifyUserEmail?email=user@example.com&token=token
     @GetMapping("/verifyUserEmail")
     public ResponseEntity<String> verifedUserUpdate(@RequestParam("email") String email,
                                                     @RequestParam("token") String token) {
 
-        logger.info("Hello "+email);
-        logger.info("*****/verifyUserEmail***");
-        logger.info("email "+email);
-        String result = "not verfied get";
-        logger.info("not verfied get");
+        String result = "User Not Verified";
+        logger.info("User Not Verified");
         try {
-            //System.out.println("in post");
-            //check if token is still valid in EmailID_Data
-
-            // confirm dynamoDB table exists
             AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
             dynamoDB = new DynamoDB(client);
-            logger.info("Get /verifyUserEmail");
             Table userEmailsTable = dynamoDB.getTable("UsernameTokenTable");
             if (userEmailsTable == null) {
                 logger.error("Table 'UsernameTokenTable' is not in dynamoDB.");
-                return new ResponseEntity<>("Unable to verify User!",HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Unable to verify User!", HttpStatus.BAD_REQUEST);
             }
 
             if (email.indexOf(" ", 0) != -1) {
@@ -124,32 +115,32 @@ public class UserController {
             Item item = userEmailsTable.getItem("emailID", email);
             logger.info("item= " + item);
             if (item == null) {
-                result = "token expired !!!";
-                logger.error("Token Expired");
-                return new ResponseEntity<>("Unique Link has Expired",HttpStatus.BAD_REQUEST);
+                result = "TTL expired !!!";
+                logger.error("TTL Expired");
+                return new ResponseEntity<>("Unique Link has Expired", HttpStatus.BAD_REQUEST);
             } else {
                 BigDecimal tokentime = (BigDecimal) item.get("TimeToLive");
                 logger.info("item= " + item);
-                long now = Instant.now().getEpochSecond(); // unix time
-                long timereminsa = now - tokentime.longValue(); // 2 mins in sec
-                logger.info("tokentime: " + tokentime);
-                logger.info("now: " + now);
-                logger.info("remins: " + timereminsa);
-                if (timereminsa > 0) {
+                long current = Instant.now().getEpochSecond(); // unix time
+                long timeleft = current - tokentime.longValue(); // 2 mins in sec
+                logger.info("Original Token Time: " + tokentime);
+                logger.info("Current Time: " + current);
+                logger.info("Time Remaining: " + timeleft);
+                if (timeleft > 0) {
                     result = "token has expired";
                     logger.error("Token Expired");
-                    return new ResponseEntity<>("Unique Link has Expired",HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("Unique Link has Expired", HttpStatus.BAD_REQUEST);
                 } else {
-                    result = "verified successfully!!!";
+                    result = "User has been verified";
                     logger.info("verified successfully!!!");
                     service.updateUserToken(email);
-                    return new ResponseEntity<>("Congratulations!!!. You have been verified.",HttpStatus.OK);
+                    return new ResponseEntity<>("Congratulations!!! "+email+" You have been verified.", HttpStatus.OK);
                 }
 
             }
 
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
