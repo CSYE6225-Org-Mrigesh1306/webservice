@@ -1,4 +1,4 @@
-# Assignment-9: AWS Simple Notification Service (SNS) & AWS Lambda Function
+# Demo-Assignment-9: AWS Simple Notification Service (SNS) & AWS Lambda Function
 
 ## AMI Updates :
 * Update your packer template to install. the Unified CloudWatch Agent in your AMIs.
